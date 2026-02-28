@@ -1,50 +1,94 @@
-# Welcome to your Expo app 👋
+MedAware
+Beyond simple reminders, our AI-driven visual verification ensures medication is actually taken, not just dismissed. Bridging the gap between care and Adherence Assurance with 60-day adherence reports for your loved ones.
+    
+📌 Overview
+MedAware is an AI-powered medication adherence platform designed to move beyond passive reminders and introduce real-world Adherence Assurance. While traditional apps simply sound an alarm that can be easily dismissed, MedAware ensures patient safety by requiring visual verification through a built-in computer vision model.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Our solution bridges the communication gap between elderly patients and their families. By categorizing doses as Verified, Not Verified, or Missed, we provide caregivers with a data-driven 60-day health report, ensuring that "dismissing an alarm" actually translates to "taking the medicine."
+    
+✨ Key Features
 
-## Get started
+🤖 AI-Powered "Visual Proof" Verification
+Unlike standard reminder apps that can be blindly dismissed, MedAware introduces Adherence Assurance through Computer Vision.
 
-1. Install dependencies
+Automatic Frame Capture: When an alarm is dismissed, the app automatically activates the camera to scan for the user and the medication.
 
-   ```bash
-   npm install
-   ```
+Intelligent Status Labeling: 
+Verified: AI confirms both the user's face and the medicine in a single frame.
 
-2. Start the app
+Not Verified: The alarm was dismissed, but the AI could not confirm the medicine was present.
 
-   ```bash
-   npx expo start
-   ```
+Missed: The alarm was ignored entirely.
 
-In the output, you'll find options to open the app in a
+📊 Comprehensive Adherence Reporting
+Bridge the communication gap between elderly parents and their children with data-driven insights.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Long-term Tracking: View detailed history for the past 30 or 60 days.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Family Transparency: Caregivers can see exactly how many doses were actually verified versus those just dismissed.
 
-## Get a fresh project
+Visual Logs: Access the stored "Verified" frames to confirm medication was taken as prescribed.
 
-When you're ready, run:
+📅 Smart Medication Management
+A complete workflow from registration to restocking.
 
-```bash
-npm run reset-project
-```
+Detailed Reminders: Input medicine name, total stock quantity, and specific dose amounts.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Inventory Alerts: A few days before your supply runs out, MedAware triggers a Restock Alert.
 
-## Learn more
+Doctor Integration: Proactive prompts to book your next appointment before your current prescription expires.
 
-To learn more about developing your project with Expo, look at the following resources:
+👤 Personalized Health Profiles
+Secure onboarding that captures essential vitals (Age, Weight, Height, Gender) to ensure all reminders are contextualized to the specific user's health needs.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+🛠️ Tech Stack
+Frontend	 React Native, Expo 
+Backend	Flask
+Database My_SQL
+AI Model
 
-## Join the community
+🚀 Getting Started
+Prerequisites
+Node.js (v18+)
+npm
+Expo Go app 
 
-Join our community of developers creating universal apps.
+Installation
+Clone the repo:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Bash
+git clone https://github.com/yourusername/MedAware.git
+cd MedAware
+
+Install dependencies:
+Bash
+npm install
+
+Run the app:
+Bash
+npx expo start
+
+📱 APK Download
+To test the application on an Android device:
+
+Navigate to the /builds or Releases section.
+
+Download MedAware-v1.0.apk.
+
+Install on your Android device (ensure "Install from Unknown Sources" is enabled).
+
+🏗️ Architecture
+The app follows a modular architecture to ensure scalability and easy integration of health data.
+
+👥 The Team
+Member 1 - Raghav Deo
+
+Member 2 - Pruthviraj Shivale
+
+Member 3 - Prerna patil
+
+Member 4 - Vivek Rajput
+
+Member 5 - Priyal tiwari
+
+

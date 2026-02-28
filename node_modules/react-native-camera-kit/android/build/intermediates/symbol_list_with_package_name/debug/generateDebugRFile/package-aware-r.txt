@@ -1,0 +1,3 @@
+com.rncamerakit
+color bg_dark
+dimen border_length

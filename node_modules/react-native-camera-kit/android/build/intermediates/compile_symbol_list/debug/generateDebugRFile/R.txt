@@ -1,0 +1,2 @@
+int color bg_dark 0x0
+int dimen border_length 0x0
