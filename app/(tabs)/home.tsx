@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
+import { BlurView } from 'expo-blur';
 import {
   Alert,
   FlatList,
@@ -57,7 +58,7 @@ export default function HomeScreen() {
       
       // TRY BACKEND FIRST
       try {
-        const remindersRes = await fetch('http://192.168.0.114:8080/get_reminders', {
+        const remindersRes = await fetch('http://10.203.52.34:8080/get_reminders', {
           method: 'GET',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
@@ -69,7 +70,7 @@ export default function HomeScreen() {
           
           for (const r of reminders) {
             try {
-              const medsRes = await fetch('http://192.168.0.114:8080/get_medicines', {
+              const medsRes = await fetch('http://10.203.52.34:8080/get_medicines', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -224,17 +225,33 @@ export default function HomeScreen() {
       <LinearGradient colors={['#2563EB', '#3B82F6', '#1E40AF']} style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
           
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.greetingContainer}>
-              <Ionicons name="sunny-outline" size={32} color="white" />
+         <BlurView intensity={40} tint = "light" style={styles.headerCard}>
+          <View style = {styles.headerTopRow}>
               <View>
-                <Text style={styles.greeting}>{greeting} 👋</Text>
-                <Text style={styles.subGreeting}>Your daily schedule</Text>
-              </View>
-            </View>
-          </View>
+      <Text style={styles.greeting}>{greeting} 👋</Text>
+      <Text style={styles.dateText}>
+        {new Date().toLocaleDateString(undefined, {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric',
+        })}
+      </Text>
+    </View>
 
+    {/* Profile Avatar */}
+    <View style={styles.avatar}>
+      <Ionicons name="person-outline" size={22} color="#2563EB" />
+    </View>
+  </View>
+
+  {/* Motivational Subtitle */}
+  <View style={styles.motivationRow}>
+    <Ionicons name="medkit-outline" size={18} color="white" />
+    <Text style={styles.subGreeting}>
+      Stay consistent. Stay healthy 💙
+        </Text>
+          </View>
+         </BlurView>
           {/* Stats */}
           <View style={styles.statsRow}>
             <View style={styles.statCard}>
@@ -263,7 +280,7 @@ export default function HomeScreen() {
 
           <FlatList
             data={medicines}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item,index) => item.id.toString() + index.toString() }
             renderItem={renderMedicineCard}
             scrollEnabled={false}
             contentContainerStyle={styles.listContent}
@@ -307,9 +324,50 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === 'ios' ? 140 : 120,
     paddingHorizontal: 24,
   },
-  header: { paddingTop: 20, paddingBottom: 20 },
+  headerCard: {
+     backgroundColor:'rgba(255,255,255,0.15)',
+     padding :24,
+     borderRadius:24,
+     marginTop:20,
+     marginBottom:24,
+    
+
+  },
+
+headerTopRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+},
+
+greeting: {
+  fontSize: 30,
+  fontWeight: '800',
+  color: 'white',
+},
+
+dateText: {
+  fontSize: 15,
+  color: 'rgba(255,255,255,0.8)',
+  marginTop: 4,
+},
+
+avatar: {
+  width: 48,
+  height: 48,
+  borderRadius: 24,
+  backgroundColor: 'white',
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
+motivationRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginTop: 18,
+  gap: 8,
+},
   greetingContainer: { flexDirection: 'row', alignItems: 'center' },
-  greeting: { fontSize: 28, fontWeight: '800', color: 'white', marginLeft: 12 },
   subGreeting: { fontSize: 16, color: 'rgba(255,255,255,0.8)', marginLeft: 12 },
   statsRow: { flexDirection: 'row', marginBottom: 24 },
   statCard: {

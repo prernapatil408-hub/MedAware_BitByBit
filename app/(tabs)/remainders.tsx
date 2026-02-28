@@ -8,45 +8,68 @@ export default function Reminders() {
 
   const renderReminder = ({ item }: { item: any }) => (
     <View style={styles.card}>
-      <View style={styles.header}>
+      
+      {/* Top Row */}
+      <View style={styles.topRow}>
         <View>
           <Text style={styles.time}>{item.time}</Text>
           <Text style={styles.medicine}>{item.name}</Text>
         </View>
+
         <TouchableOpacity 
-          style={styles.markBtn}
+          style={styles.checkBtn}
           onPress={() => markTaken(item.id)}
         >
-          <Ionicons name="checkmark-circle" size={28} color="#10B981" />
+          <Ionicons name="checkmark-circle" size={30} color="#22C55E" />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity 
-        style={styles.deleteBtn}
-        onPress={() => deleteMedicine(item.id)}
-      >
-        <Ionicons name="trash-outline" size={20} color="#EF4444" />
-      </TouchableOpacity>
+
+      {/* Bottom Row */}
+      <View style={styles.bottomRow}>
+        <View style={[
+          styles.statusBadge,
+          { backgroundColor: item.taken ? '#DCFCE7' : '#FEF3C7' }
+        ]}>
+          <Text style={[
+            styles.statusText,
+            { color: item.taken ? '#15803D' : '#B45309' }
+          ]}>
+            {item.taken ? 'Taken' : 'Pending'}
+          </Text>
+        </View>
+
+        <TouchableOpacity 
+          style={styles.deleteBtn}
+          onPress={() => deleteMedicine(item.id)}
+        >
+          <Ionicons name="trash-outline" size={18} color="#EF4444" />
+        </TouchableOpacity>
+      </View>
+
     </View>
   );
 
   if (reminders.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <Ionicons name="time-outline" size={80} color="#CBD5E1" />
+        <Ionicons name="time-outline" size={90} color="#CBD5E1" />
         <Text style={styles.emptyTitle}>No Reminders</Text>
-        <Text style={styles.emptyText}>Add medicines to get started</Text>
+        <Text style={styles.emptyText}>Start by adding your medicines 💊</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{reminders.length} Reminder{reminders.length !== 1 ? 's' : ''}</Text>
+      <Text style={styles.title}>
+        {reminders.length} Reminder{reminders.length !== 1 ? 's' : ''}
+      </Text>
+
       <FlatList
         data={reminders}
         keyExtractor={(item) => item.id}
         renderItem={renderReminder}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -54,35 +77,93 @@ export default function Reminders() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8FAFC', padding: 20 },
-  title: { fontSize: 24, fontWeight: 'bold', color: '#1E293B', marginBottom: 20 },
-  card: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+  container: {
+    flex: 1,
+    backgroundColor: '#F1F5F9',
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  time: { fontSize: 20, fontWeight: '700', color: '#1E293B' },
-  medicine: { fontSize: 16, color: '#64748B', marginTop: 4 },
-  markBtn: { padding: 8 },
-  deleteBtn: { 
-    alignSelf: 'flex-end', 
-    marginTop: 12, 
-    padding: 8,
+
+  title: {
+    fontSize: 26,
+    fontWeight: '800',
+    color: '#0F172A',
+    marginBottom: 20,
+  },
+
+  card: {
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    borderRadius: 18,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
+
+  bottomRow: {
+    marginTop: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  time: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#1E293B',
+  },
+
+  medicine: {
+    fontSize: 16,
+    color: '#64748B',
+    marginTop: 6,
+  },
+
+  checkBtn: {
+    padding: 6,
+  },
+
+  statusBadge: {
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+  },
+
+  statusText: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+
+  deleteBtn: {
+    padding: 8,
+  },
+
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F1F5F9',
   },
-  emptyTitle: { fontSize: 22, fontWeight: '600', color: '#1E293B', marginTop: 16 },
-  emptyText: { fontSize: 16, color: '#64748B', marginTop: 8 },
+
+  emptyTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#1E293B',
+    marginTop: 20,
+  },
+
+  emptyText: {
+    fontSize: 16,
+    color: '#64748B',
+    marginTop: 8,
+  },
 });

@@ -25,7 +25,7 @@ export default function RootLayout() {
       const inTabsGroup = segments[0] === '(tabs)';
       
       if (loggedIn && !inTabsGroup) {
-        router.replace('/(tabs)');
+        router.replace('/(tabs)/home');
       } else if (!loggedIn && inTabsGroup) {
         router.replace('/');
       }

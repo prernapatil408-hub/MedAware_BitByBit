@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "MedicineReminder",
+    "slug": "medicinereminder",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "permissions": [
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED",
+        "CAMERA",
+        "INTERNET",
+         "ACCESS_NETWORK_STATE"
+        
+      ],
+      "package": "com.vivekrajput.medaware"
+    },
+    "plugins": [
+      "expo-notifications",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      "expo-router"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "72fe1715-2960-4221-af9d-730b7f384ef8"
+      }
+    },
+    "owner": "vivek_rajput"
+  }
+}

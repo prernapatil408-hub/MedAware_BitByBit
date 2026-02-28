@@ -71,7 +71,7 @@ export default function RegisterScreen() {
 
     try {
       setLoading(true);
-      console.log('🔥 REGISTER → http://=192.168.0.114:8080/register', {
+      console.log('🔥 REGISTER → http://=10.203.52.34:8080/register', {
         email: formData.email,
         age: parseInt(formData.age),
         height: parseInt(formData.height),
@@ -79,7 +79,7 @@ export default function RegisterScreen() {
         gender: formData.gender
       });
 
-      const response = await fetch('http://192.168.0.114:8080/register', {
+      const response = await fetch('http://10.203.52.34:8080/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -109,19 +109,23 @@ export default function RegisterScreen() {
       }
     } catch (error: any) {
       console.log('💥 Register error:', error.message);
-      Alert.alert('Network Error', `Registration failed: ${error.message}\n\nBackend: http://192.168.0.114:8080`);
+      Alert.alert('Network Error', `Registration failed: ${error.message}\n\nBackend: http://10.203.52.34:8080`);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <LinearGradient colors={['#2563EB', '#3B82F6', '#1E40AF']} style={styles.gradient}>
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <LinearGradient style={styles.gradient}   colors={['#1E3A8A', '#2563EB', '#60A5FA']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}>
         <StatusBar barStyle="light-content" />
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.header}>
+            <View style = {styles.iconCircle}>
             <Ionicons name="person-add-outline" size={80} color="white" />
+            </View>
             <Text style={styles.title}>Create Account</Text>
             <Text style={styles.subtitle}>Join MedReminder</Text>
           </View>
@@ -198,6 +202,7 @@ export default function RegisterScreen() {
                 />
               </View>
             </View>
+            <View style={styles.divider} />
 
             <CustomButton
               title="Create Account"
@@ -219,38 +224,57 @@ const styles = StyleSheet.create({
   gradient: { flex: 1 },
   container: { 
     flexGrow: 1, 
-    justifyContent: 'center', 
     padding: 24 
   },
   header: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 60,
   },
   title: {
-    fontSize: 36,
-    fontWeight: 'bold',
+    fontSize: 40,
+    fontWeight: '800',
+    letterSpacing : 1,
     color: 'white',  // ✅ Fixed from 'black'
     marginTop: 20,
   },
+  divider: {
+  height: 1,
+  backgroundColor: '#E2E8F0',
+  marginVertical: 20,
+},
+  iconCircle: {
+  backgroundColor: 'white',
+  width: 100,
+  height: 100,
+  borderRadius: 50,
+  justifyContent: 'center',
+  alignItems: 'center',
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 10 },
+  shadowOpacity: 0.15,
+  shadowRadius: 20,
+  elevation: 8,
+},
   subtitle: {
     fontSize: 18,
     color: 'rgba(255,255,255,0.9)',
     marginTop: 8,
   },
   formContainer: {
-    backgroundColor: 'rgba(255,255,255,0.95)',
-    borderRadius: 24,
+    backgroundColor: '#ffffff',
+    borderRadius: 28,
     padding: 32,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 20 },
-    shadowOpacity: 0.1,
-    shadowRadius: 30,
-    elevation: 10,
+    shadowOffset: { width: 0, height: 25 },
+    shadowOpacity: 0.12,
+    shadowRadius: 40,
+    elevation: 15,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: 8,
+    marginTop: 8,
   },
   halfContainer: {
     flex: 0.48,
@@ -260,8 +284,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   linkText: {
-    color: COLORS.primary || '#2563EB',
-    fontSize: 16,
-    fontWeight: '600',
+    color:  '#2563EB',
+    fontSize: 15,
+    fontWeight: '700',
+    letterSpacing:0.3,
   },
 });

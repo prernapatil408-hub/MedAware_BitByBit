@@ -56,9 +56,9 @@ export default function LoginScreen() {
 
     try {
       setLoading(true);
-      console.log('🔥 LOGIN → http://192.168.0.114:8080/login', formData);
+      console.log('🔥 LOGIN → http//=10.203.52.34:8080/login', formData);
       
-      const response = await fetch('http://192.168.0.114:8080/login', {
+      const response = await fetch('http://10.203.52.34:8080/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',  // ✅ Backend session
@@ -82,7 +82,7 @@ export default function LoginScreen() {
       }
     } catch (error: any) {
       console.log('💥 Error:', error.message);
-      Alert.alert('Network Error', `Login failed: ${error.message}\n\nBackend: http://192.168.0.114:8080`);
+      Alert.alert('Network Error', `Login failed: ${error.message}\n\nBackend: http://10.203.52.34:8080`);
     } finally {
       setLoading(false);
     }
@@ -91,10 +91,11 @@ export default function LoginScreen() {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <LinearGradient colors={['#2563EB', '#3B82F6', '#1E40AF']} style={styles.gradient}>
-        <StatusBar barStyle="light-content" />
-        <ScrollView contentContainerStyle={styles.container}>
+        <StatusBar translucent backgroundColor="transparent" />
+        <ScrollView contentContainerStyle={styles.container} >
           <View style={styles.header}>
-            <Ionicons name="medkit-outline" size={80} color="white" />
+            <View style = {styles.iconCircle}>
+            <Ionicons name="medkit-outline" size={50} color="#2563EB" /></View>
             <Text style={styles.title}>MedReminder</Text>
             <Text style={styles.subtitle}>Welcome Back</Text>
           </View>
@@ -117,6 +118,7 @@ export default function LoginScreen() {
               onChangeText={(text) => updateField('password', text)}
               error={errors.password}
             />
+            <View style = {styles.divider}/>
             
             <CustomButton 
               title="Login" 
@@ -146,11 +148,25 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 60,
   },
+  iconCircle: {
+  backgroundColor: 'white',
+  width: 100,
+  height: 100,
+  borderRadius: 50,
+  justifyContent: 'center',
+  alignItems: 'center',
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 10 },
+  shadowOpacity: 0.15,
+  shadowRadius: 20,
+  elevation: 8,
+},
   title: {
-    fontSize: 36,
-    fontWeight: 'bold',
+    fontSize: 40,
+    fontWeight: '800',
+    letterSpacing :1,
     color: 'white',
     marginTop: 20,
   },
@@ -160,22 +176,28 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   formContainer: {
-    backgroundColor: 'rgba(255,255,255,0.95)',
-    borderRadius: 24,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 28,
     padding: 32,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 20 },
-    shadowOpacity: 0.1,
-    shadowRadius: 30,
-    elevation: 10,
+    shadowOffset: { width: 0, height: 25 },
+    shadowOpacity: 0.12,
+    shadowRadius: 40,
+    elevation: 15,
   },
+  divider: {
+  height: 1,
+  backgroundColor: '#E2E8F0',
+  marginVertical: 20,
+},
   link: {
     alignItems: 'center',
     marginTop: 20,
   },
   linkText: {
-    color: COLORS.primary || '#2563EB',
-    fontSize: 16,
-    fontWeight: '600',
+    color: '#2563EB',
+    fontSize: 15,
+    fontWeight: '700',
+    letterSpacing:0.3,
   },
 });

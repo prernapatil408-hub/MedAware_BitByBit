@@ -9,8 +9,7 @@ export default function CameraScreen() {
   console.log('📱 CameraScreen forwarding params:', { medicineId, reminderId });
   
   return <CameraVerification 
-      routeMedicineId={medicineId as string} 
-      routeReminderId={reminderId as string}
+      
   
   />;
 }

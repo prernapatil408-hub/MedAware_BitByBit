@@ -7,14 +7,25 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import type { ComponentProps } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import CustomButton from '../../components/CustomButton';
+
+type IoniconName = ComponentProps<typeof Ionicons>['name'];
+
+ interface ProfileStatProps {
+  icon: IoniconName;
+  label: string;
+  value: string;
+  color: string;
+}
 
 export default function ProfileScreen() {
   const [userData, setUserData] = useState({
@@ -23,40 +34,43 @@ export default function ProfileScreen() {
     height: '',
     weight: '',
   });
-  interface ProfileStatProps {
-  icon: IoniconName;
-  label: string;
-  value: string;
-  color: string;
-}
-type IoniconName = ComponentProps<typeof Ionicons>['name'];
+ 
+
 
 
   const [medicinesCount, setMedicinesCount] = useState(0);
   const [dosesTaken, setDosesTaken] = useState(0);
   const router = useRouter();
 
-  useEffect(() => {
-    loadProfileData();
-  }, []);
+ useFocusEffect(
+    React.useCallback(() => {
+      loadProfileData();
+    }, [])
+  );
 
   const loadProfileData = async () => {
-    const user = await AsyncStorage.getItem('userData');
-    if (user) {
-      setUserData(JSON.parse(user));
-    }
+    try {
+      const user = await AsyncStorage.getItem('userData');
+      const medicines = await AsyncStorage.getItem('medicines');
+      const history = await AsyncStorage.getItem('history');
 
-    // Load stats
-    const medicines = await AsyncStorage.getItem('medicines');
-    const history = await AsyncStorage.getItem('history');
-    setMedicinesCount(medicines ? JSON.parse(medicines).length : 0);
-    setDosesTaken(history ? JSON.parse(history).filter((h: any) => h.status === 'taken').length : 0);
+      if (user) setUserData(JSON.parse(user));
+      
+      // Calculate counts safely
+      const medList = medicines ? JSON.parse(medicines) : [];
+      const historyList = history ? JSON.parse(history) : [];
+
+      setMedicinesCount(medList.length);
+      setDosesTaken(historyList.filter((h: any) => h.status === 'taken').length);
+    } catch (err) {
+      console.error("Failed to load profile data", err);
+    }
   };
  const handleLogout = async () => {
   try {
     await AsyncStorage.multiRemove(['uid', 'isLoggedIn', 'userToken', 'userData']);
     Alert.alert('Logged Out', 'Come back anytime!', [
-      { text: 'OK', onPress: () => router.replace('/index') } // force back to login
+      { text: 'OK', onPress: () => router.replace('/') } // force back to login
     ]);
   } catch (err) {
     console.log("Logout error:", err);
@@ -81,22 +95,33 @@ type IoniconName = ComponentProps<typeof Ionicons>['name'];
       style={styles.container}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Profile Header */}
-        <View style={styles.header}>
-          <Image
-            source={{
-              uri: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150'
-            }}
-            style={styles.avatar}
-          />
-          <View style={styles.headerContent}>
-            <Text style={styles.userName}>
-              {userData.email?.split('@')[0] || 'User'}
-            </Text>
-            <Text style={styles.userEmail}>{userData.email || 'No email'}</Text>
-          </View>
-        </View>
+        <LinearGradient
+  colors={['#2196F3', '#42A5F5']}
+  style={styles.premiumHeader}
+>
+  <View style={styles.avatarWrapper}>
+    <Image
+      source={{
+        uri: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150'
+      }}
+      style={styles.premiumAvatar}
+    />
+  </View>
 
+  <Text style={styles.premiumName}>
+    {userData.email?.split('@')[0] || 'User'}
+  </Text>
+
+  <Text style={styles.premiumEmail}>
+    {userData.email || 'No email'}
+  </Text>
+
+  <View style={styles.activeBadge}>
+    <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
+    <Text style={styles.activeText}>Active User</Text>
+  </View>
+</LinearGradient>
+     
         {/* Stats */}
         <View style={styles.statsSection}>
           <ProfileStat 
@@ -166,35 +191,58 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 50,
-    paddingBottom: 30,
-    backgroundColor: 'rgba(33, 150, 243, 0.05)',
-  },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginRight: 20,
-    borderWidth: 4,
-    borderColor: 'rgba(33, 150, 243, 0.3)',
-  },
-  headerContent: {
-    flex: 1,
-  },
-  userName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2196F3',
-    marginBottom: 4,
-  },
-  userEmail: {
-    fontSize: 16,
-    color: '#666',
-  },
+  premiumHeader: {
+  paddingTop: 70,
+  paddingBottom: 40,
+  alignItems: 'center',
+  borderBottomLeftRadius: 30,
+  borderBottomRightRadius: 30,
+},
+
+avatarWrapper: {
+  padding: 4,
+  borderRadius: 60,
+  backgroundColor: 'rgba(255,255,255,0.3)',
+},
+
+premiumAvatar: {
+  width: 100,
+  height: 100,
+  borderRadius: 50,
+  borderWidth: 4,
+  borderColor: 'white',
+},
+
+premiumName: {
+  fontSize: 26,
+  fontWeight: 'bold',
+  color: 'white',
+  marginTop: 16,
+},
+
+premiumEmail: {
+  fontSize: 15,
+  color: 'rgba(255,255,255,0.9)',
+  marginTop: 4,
+},
+
+activeBadge: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: 'white',
+  paddingHorizontal: 14,
+  paddingVertical: 6,
+  borderRadius: 20,
+  marginTop: 14,
+},
+
+activeText: {
+  fontSize: 13,
+  fontWeight: '600',
+  color: '#4CAF50',
+  marginLeft: 6,
+},
+
   statsSection: {
     flexDirection: 'row',
     paddingHorizontal: 24,

@@ -77,7 +77,7 @@ export default function AddMedicine() {
     setLoading(true);
     
     // STEP 1: LOGIN CHECK - Get uid from session
-    const uidResponse = await fetch('http://192.168.0.114:8080/login', {
+    const uidResponse = await fetch('http://172.18.110.151:8080/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',  // Required for session
@@ -89,7 +89,7 @@ export default function AddMedicine() {
    
     // STEP 2: CREATE REMINDER → Get rid
     console.log('📅 STEP 1: Creating reminder...');
-    const reminderResponse = await fetch('http://192.168.0.114:8080/add_reminder', {
+    const reminderResponse = await fetch('http://172.18.110.151:8080/add_reminder', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',  // Session cookie
@@ -111,7 +111,7 @@ export default function AddMedicine() {
      setrid(newRid);
     // STEP 3: ADD MEDICINE → Get mid  
     console.log('💊 STEP 2: Adding medicine...');
-    const medicineResponse = await fetch('http://192.168.0.114:8080/add_medicine', {
+    const medicineResponse = await fetch('http://172.18.110.151:8080/add_medicine', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

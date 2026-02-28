@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback , memo } from 'react';
 import {
   View,
   FlatList,
@@ -18,7 +18,7 @@ type HistoryItem = {
   id: string;
   medicineId: string;
   medicineName: string;
-  status: 'taken' | 'missed';
+  status: 'pending' | 'taken' | 'missed';
   time: string;
 };
 
@@ -29,37 +29,38 @@ export default function HistoryScreen() {
 
 
   const loadHistory = async () => {
-    try {
-      const data = await AsyncStorage.getItem('history');
-      const parsed = data ? JSON.parse(data) : [];
+  try {
+    const data = await AsyncStorage.getItem('history');
+    const parsed = data ? (JSON.parse(data) as HistoryItem[]) : [];
 
-     
-      const updated = parsed.map((item: HistoryItem) => {
-        if (
-          item.status !== 'taken' &&
-          new Date(item.time) < new Date()
-        ) {
-          return { ...item, status: 'missed' };
-        }
-        return item;
-      });
+    let hasChanges = false;
+    const now = new Date();
 
-     
-      const sorted = updated.sort(
-        (a: HistoryItem, b: HistoryItem) =>
-          new Date(b.time).getTime() -
-          new Date(a.time).getTime()
-      );
+   const updated = parsed.map((item) => {
+  if (item.status === 'pending' && new Date(item.time) < now) {
+    hasChanges = true;
+    return { ...item, status: 'missed' as HistoryItem['status'] };
+  }
+  return item;
+});
 
-      setHistory(sorted);
-    } catch (error) {
-      console.log('Error loading history:', error);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
+if (hasChanges) {
+  await AsyncStorage.setItem('history', JSON.stringify(updated));
+}
 
+const sorted = [...updated].sort(
+  (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+);
+
+setHistory(sorted);
+  } catch (error) {
+    console.error('Error loading history:', error);
+    Alert.alert('Error', 'Failed to load medication history.');
+  } finally {
+    setLoading(false);
+    setRefreshing(false);
+  }
+};
   
   useFocusEffect(
     useCallback(() => {
@@ -199,6 +200,8 @@ export default function HistoryScreen() {
         data={history}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
         contentContainerStyle={[
           styles.list,
           history.length === 0 && { flex: 1 },
